@@ -1,2 +1,2 @@
 #!/bin/bash
-echo 1 > a.log
+echo 11 > a.log
