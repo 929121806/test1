@@ -1,18 +1,13 @@
 node {
 
-  stage ('Checkout') {
-     git url:'https://github.com/929121806/test1.git'
-  }
+  stage 'Checkout'
+  git 'https://github.com/929121806/test1.git'
 
-  stage ('Check image') {
-      sh 'python ./test.py'
-  }
+  stage 'test1'
+  echo "********************************hello*******************************"
 
-  stage ('Create service') {
-      sh './test.sh'
-  }
-
-  stage ('Check service') {
-      
-  }
+  stage 'test2'
+  sh 'ls /'
+  sh 'pwd'
+  
 }
