@@ -5,9 +5,8 @@ node {
 
   stage 'test1'
   echo "********************************hello*******************************"
+  sh './test.sh'
 
   stage 'test2'
-  sh 'ls /'
-  sh 'pwd'
-  
+  sh 'python ./test.py'
 }
