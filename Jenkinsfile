@@ -1,15 +1,15 @@
 node {
 
   stage ('Checkout') {
-     sh "./git.sh"
+     sh './git.sh'
   }
 
   stage ('Check image') {
-      sh "python ./test.py"
+      sh 'python ./test.py'
   }
 
   stage ('Create service') {
-      sh "./test.sh"
+      sh './test.sh'
   }
 
   stage ('Check service') {
