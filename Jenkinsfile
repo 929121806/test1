@@ -1,7 +1,7 @@
 node {
 
   stage ('Checkout') {
-     pwd
+     sh 'pwd'
      sh './git.sh'
   }
 
