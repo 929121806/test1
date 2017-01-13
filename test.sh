@@ -1,2 +1,3 @@
-#!/bin/bash 
-echo 1 > a
+#!/bin/bash
+echo 111 > b.log
+
