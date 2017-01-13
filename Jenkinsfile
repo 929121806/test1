@@ -5,6 +5,8 @@ node {
 
   stage 'test1'
   echo "********************************hello*******************************"
+  sh 'chmod a+x test.sh'
+  sh 'chmod a+x test.py'
   sh './test.sh'
 
   stage 'test2'
