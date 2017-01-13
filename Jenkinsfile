@@ -7,6 +7,7 @@ node {
   echo "********************************hello*******************************"
   sh 'chmod a+x test.sh'
   sh 'chmod a+x test.py'
+  sh 'curl www.baidu.com'
   sh './test.sh'
 
   stage 'test2'
