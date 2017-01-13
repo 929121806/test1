@@ -1,8 +1,7 @@
 node {
 
   stage ('Checkout') {
-     sh 'pwd'
-     sh './git.sh'
+     git url:'https://github.com/929121806/test1.git'
   }
 
   stage ('Check image') {
