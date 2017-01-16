@@ -10,7 +10,7 @@ repos_id=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: a
 echo "repos_id: $repos_id"
 
 #获取新创建镜像的status
-status=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/repositories/${repos_id}" | head -n 1 | awk -F ',' '{print $3}' | awk -F ':' '{print $2}' | sed 's/..$//')
+status=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/repositories/${repos_id}" | head -n 1 | awk -F ',' '{print $3}' | awk -F ':' '{print $2}' | sed 's/.$//')
 echo "image status: $status"
 
 #获取新镜像版本号
@@ -18,7 +18,7 @@ image_tag=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: 
 echo "image_tag: $image_tag"
 image_tag2=$(echo $image_tag | sed 's/^.//' | sed 's/.$//')
 echo "image_tag2: $image_tag2"
-echo "hub.c.163.com/wanghongpeng0102/test:${image_tag2}"
+#echo "hub.c.163.com/wanghongpeng0102/test:${image_tag2}"
 
 #镜像未创建完成时
 while true;do
@@ -46,7 +46,7 @@ sleep 2
 
 #创建密钥并获取密钥名称，本示例密钥名称为镜像tag
 key=$(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{"key_name": '$image_tag'}' "https://open.c.163.com/api/v1/secret-keys")
-echo "key: $key"
+#echo "key: $key"
 
 #获取密钥列表
 #curl -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/secret-keys" &>/dev/null
@@ -57,7 +57,7 @@ echo "namespace_id: $namespace_id"
 
 #镜像创建成功时新建服务并获取新建服务的id,本示例服务名称和容器名称都为新镜像tag
 if [ $status -eq 2 ];then
-  curl -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{
+  echo $(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{
     "bill_info":"default",
         "service_info": {
         "namespace_id": '$namespace_id',
@@ -109,6 +109,6 @@ if [ $status -eq 2 ];then
             }
         }
     ]
-}' "https://open.c.163.com/api/v1/microservices"
+}' "https://open.c.163.com/api/v1/microservices")
+echo "服务创建成功则输出如下格式提示: {"service_id":"53741"}"
 fi
-echo "返回格式如{service_id:53739}则服务构建成功"
