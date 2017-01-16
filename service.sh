@@ -16,6 +16,9 @@ echo "image status: $status"
 #获取新镜像版本号
 image_tag=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1    /repositories/${repos_id}" | awk -F ':' '{print $3}' | awk -F ',' '{print $1}') # | sed 's/^.//' | sed 's/.$//')
 echo "image_tag: $image_tag"
+image_tag2=$(echo $image_tag | sed 's/^.//' | sed 's/.$//')
+echo "image_tag2: $image_tag2"
+echo "hub.c.163.com/wanghongpeng0102/test:${image_tag2}"
 
 #镜像未创建完成时
 while true;do
@@ -37,8 +40,8 @@ ip_uuid=$(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: a
 echo "ip_uuid: $ip_uuid"
 
 #创建云硬盘，本示例云硬盘名称为镜像tag
-disk=$(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{"size": 10,  "volume_name": '$image_tag'}' "https://open.c.163.com/api/v1/cloud-volumes")
-echo "disk: $disk"
+disk_id=$(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{"size": 10,  "volume_name": '$image_tag'}' "https://open.c.163.com/api/v1/cloud-volumes" | awk -F ':' '{print $2}' | sed 's/.$//')
+echo "disk_id: $disk_id"
 sleep 2
 
 #创建密钥并获取密钥名称，本示例密钥名称为镜像tag
@@ -46,7 +49,7 @@ key=$(curl -s -X POST -H "Authorization: Token ${token}" -H "Content-Type: appli
 echo "key: $key"
 
 #获取密钥列表
-curl -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/secret-keys" &>/dev/null
+#curl -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/secret-keys" &>/dev/null
 
 #获取空间id, 本示例使用命名空间default
 namespace_id=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/namespaces" | awk -F '{' '{print $NF}' | awk -F ',' '{print $2}' | awk -F ':' '{print $2}')
@@ -57,10 +60,10 @@ if [ $status -eq 2 ];then
   curl -X POST -H "Authorization: Token ${token}" -H "Content-Type: application/json" -d '{
     "bill_info":"default",
         "service_info": {
-        "namespace_id": "5766",
+        "namespace_id": '$namespace_id',
         "stateful": "1",
         "replicas": 1,
-        "service_name": "centos01",
+        "service_name": '$image_tag',
         "port_maps": [
             {
                 "dest_port": "80",
@@ -75,12 +78,12 @@ if [ $status -eq 2 ];then
             "bandwidth": 20
         },
         "disk_type": 0,
-        "ip_id": "76e003f7-02b0-47df-a89c-da1ccafcfb57"
+        "ip_id": '$ip_uuid'
     },
     "service_container_infos": [
         {
-            "image_path": "hub.c.163.com/public/ubuntu:14.04",
-            "container_name": "container003",
+            "image_path": "hub.c.163.com/wanghongpeng0102/test:'$image_tag2'",
+            "container_name": '$image_tag',
             "command": "",
             "envs": [
                 {
@@ -98,22 +101,14 @@ if [ $status -eq 2 ];then
             "cpu_weight": 100,
             "memory_weight": 100,
             "ssh_keys": [
-                "miyao6","latest"
+                "miyao6",'$image_tag'
             ],
             "local_disk_info": [],
             "volume_info": {
-                "latest": "/data/"
+                "'$disk_id'": "/data/"
             }
         }
     ]
 }' "https://open.c.163.com/api/v1/microservices"
 fi
-
-#检查服务是否新建完成
-curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/namespaces/55991/microservices?offset=0&limit=10" | grep ${image_tag} --color &>/dev/null
-if [ $? -ne 0 ];then
-  echo "service ${image_tag} 新建失败!"
-  exit 0
-else
-  echo "service ${image_tag} 新建成功!"
-fi
+echo "返回格式如{service_id:53739}则服务构建成功"
