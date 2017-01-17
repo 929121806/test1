@@ -1,4 +1,6 @@
 node {
+  stage 'checkout'
+  git clone https://github.com/929121806/test1.git
 
   stage 'create service'
   sh 'pwd'
