@@ -6,5 +6,5 @@ node {
   sh '../test1@script/service.sh' 
 
   stage 'ci test'
-  sh 'python ../test1@script/test.py'
+  sh 'python ../test1@script/main.py'
 }
