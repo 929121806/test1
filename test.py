@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 import os
-ans = os.path.isfile("/root/test1/a.log")
+ans = os.path.isfile("/root/a.log")
 if ans:
   print "ok, 文件新建成功 !"
 else:
