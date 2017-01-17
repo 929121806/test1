@@ -2,8 +2,8 @@
 import os
 ans = os.path.isfile("/root/a.log")
 if ans:
-  print "ok, 文件新建成功 !"
+  print "success !"
 else:
-  print "error, 文件新建失败"
+  print "error !"
 
 

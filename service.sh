@@ -110,5 +110,4 @@ if [ $status -eq 2 ];then
         }
     ]
 }' "https://open.c.163.com/api/v1/microservices")
-echo "服务创建成功则输出如下格式提示: {"service_id":"53741"}"
 fi
