@@ -1,5 +1,6 @@
 node("slave"){
   stage 'checkout'
+  sh 'checkout release'
   git 'https://github.com/929121806/test1.git'
 
   stage 'create service'
