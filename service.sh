@@ -13,7 +13,7 @@ echo "repos_id: $repos_id"
 status=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1/repositories/${repos_id}" | head -n 1 | awk -F ',' '{print $3}' | awk -F ':' '{print $2}' | sed 's/.$//')
 echo "image status: $status"
 
-#获取新镜像版本号
+#获取新镜像版本号。可以考虑记录上次的最新镜像版本，与本次的镜像版本对比，判断是否是最新的镜像。
 image_tag=$(curl -s -X GET -H "Authorization: Token ${token}" -H "Content-Type: application/json" "https://open.c.163.com/api/v1    /repositories/${repos_id}" | awk -F ':' '{print $3}' | awk -F ',' '{print $1}') # | sed 's/^.//' | sed 's/.$//')
 echo "image_tag: $image_tag"
 image_tag2=$(echo $image_tag | sed 's/^.//' | sed 's/.$//')
