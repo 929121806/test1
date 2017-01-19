@@ -1,2 +1,2 @@
 import os
-os.system("touch /root/a.log")
+os.system("touch  /root/a.log")
